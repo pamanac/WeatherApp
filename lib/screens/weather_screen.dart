@@ -37,7 +37,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                         child: weatherRow('Description: ', result.description)),
                     Expanded(
                       flex: 1,
-                      child: result.description == "Clouds"
+                      child: result.description == "Clouds" //To improve
                           ? Icon(Icons.cloud)
                           : Icon(Icons.ac_unit),
                     )
