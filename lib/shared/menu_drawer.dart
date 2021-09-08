@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tutorial_app/screens/sessions_screen.dart';
 import 'package:tutorial_app/screens/weather_screen.dart';
 import '../screens/bmi_screen.dart';
 import '../screens/intro_screen.dart';
@@ -16,7 +17,12 @@ class MenuDrawer extends StatelessWidget {
   }
 
   List<Widget> buildItems(BuildContext context) {
-    final List<String> titles = ["Home", "BMI", "Weather", "Training"];
+    final List<String> titles = [
+      "Home",
+      "BMI",
+      "Weather",
+      "Training",
+    ];
     List<Widget> items = [];
     items.add(DrawerHeader(
         decoration: BoxDecoration(color: Colors.blueGrey),
@@ -40,6 +46,9 @@ class MenuDrawer extends StatelessWidget {
                 break;
               case 'Weather':
                 screen = WeatherScreen();
+                break;
+              case 'Training':
+                screen = SessionScreen();
                 break;
             }
             Navigator.of(context).pop(); //remove drawer
