@@ -28,6 +28,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   void initState() {
     isSelected = [isMetric, isImperial];
     super.initState();
+    getCity();
   }
 
   final TextEditingController txtPlace = TextEditingController();
@@ -281,7 +282,7 @@ Image fetchImage(String type) {
       );
     case "Clear":
       return Image.asset(
-        "sun2.png",
+        "sun.png",
         height: 200,
         width: 200,
       );
