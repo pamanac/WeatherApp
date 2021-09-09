@@ -16,77 +16,100 @@ class _WeatherScreenState extends State<WeatherScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text("Weather")),
-        body: Padding(
-            padding: EdgeInsets.all(20),
-            child: Stack(
-              children: [
-                Align(
-                  child: Container(
-                      width: 100.0,
-                      child: TextField(
-                          controller: txtPlace,
-                          decoration: InputDecoration(
-                              hintText: "City",
-                              suffixIcon: IconButton(
-                                  icon: Icon(Icons.search),
-                                  onPressed: getData)))),
-                  alignment: Alignment.topLeft,
-                ),
-                Align(
-                  child: Text("12:00"),
-                  alignment: Alignment.topRight,
-                ),
-                Align(
-                  child: Container(
-                      height: 100.0,
-                      width: 300.0,
-                      child: ListView(
-                        children: [
-                          //weatherRow('Perceived: ', result.perceived.toStringAsFixed(2)),
-                          Row(children: [
-                            Icon(Icons.access_alarm),
-                            Text(result.perceived.toStringAsFixed(2))
-                          ]),
-
-                          //weatherRow('Pressure: ', result.pressure.toString()),
-                          Row(children: [
-                            Icon(Icons.add_sharp),
-                            Text(result.pressure.toString())
-                          ]),
-
-                          //weatherRow('Humidity: ', result.humidity.toString()),
-                          Row(children: [
-                            Icon(Icons.safety_divider),
-                            Text(result.humidity.toString())
-                          ]),
-                        ],
-                      )),
-                  alignment: Alignment.bottomLeft,
-                ),
-                Align(
-                  child: Container(
-                      width: 150.0,
-                      height: 100.0,
-                      child: //weatherRow(
-                          //'', result.temperature.toStringAsFixed(2))
-                          Text(result.temperature.toStringAsFixed(2),
-                              style: TextStyle(fontSize: 40))),
-                  alignment: Alignment.bottomRight,
-                ),
-                Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      result.description == ""
-                          ? Text('')
-                          : Icon(fetchIcon(result.description)),
-                      Text(result.description)
-                    ],
+        body: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("world.jpg"), fit: BoxFit.cover)),
+          child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Stack(
+                children: [
+                  Align(
+                    child: Container(
+                        width: 150.0,
+                        child: TextField(
+                            style: TextStyle(color: Colors.white),
+                            controller: txtPlace,
+                            decoration: InputDecoration(
+                                hintText: "City",
+                                hintStyle: TextStyle(color: Colors.white),
+                                labelStyle: TextStyle(color: Colors.white),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                ),
+                                suffixIcon: IconButton(
+                                    icon:
+                                        Icon(Icons.search, color: Colors.white),
+                                    onPressed: getData)))),
+                    alignment: Alignment.topLeft,
                   ),
-                )
-              ],
-            )));
+                  Align(
+                    child: Text("12:00", style: TextStyle(color: Colors.white)),
+                    alignment: Alignment.topRight,
+                  ),
+                  Align(
+                    child: Container(
+                        height: 100.0,
+                        width: 300.0,
+                        child: ListView(
+                          children: [
+                            //weatherRow('Perceived: ', result.perceived.toStringAsFixed(2)),
+                            Row(children: [
+                              Icon(
+                                Icons.access_alarm,
+                                color: Colors.white,
+                              ),
+                              Text(result.perceived.toStringAsFixed(2),
+                                  style: TextStyle(color: Colors.white))
+                            ]),
+
+                            //weatherRow('Pressure: ', result.pressure.toString()),
+                            Row(children: [
+                              Icon(Icons.add_sharp, color: Colors.white),
+                              Text(result.pressure.toString(),
+                                  style: TextStyle(color: Colors.white))
+                            ]),
+
+                            //weatherRow('Humidity: ', result.humidity.toString()),
+                            Row(children: [
+                              Icon(Icons.window, color: Colors.white),
+                              Text(result.humidity.toString(),
+                                  style: TextStyle(color: Colors.white))
+                            ]),
+                          ],
+                        )),
+                    alignment: Alignment.bottomLeft,
+                  ),
+                  Align(
+                    child: Container(
+                        width: 150.0,
+                        height: 100.0,
+                        child: //weatherRow(
+                            //'', result.temperature.toStringAsFixed(2))
+                            Text(
+                                result.temperature.toStringAsFixed(2) +
+                                    "\u00B0", //this is degree sign
+                                style: TextStyle(
+                                    fontSize: 40, color: Colors.white))),
+                    alignment: Alignment.bottomRight,
+                  ),
+                  Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        result.description == ""
+                            ? Text('')
+                            : //Icon(fetchIcon(result.description),
+                            fetchImage(result.description),
+                        Text(result.description,
+                            style: TextStyle(color: Colors.white))
+                      ],
+                    ),
+                  )
+                ],
+              )),
+        ));
     /*
           Padding(
           padding: EdgeInsets.all(16)
@@ -145,7 +168,32 @@ IconData fetchIcon(String type) {
   switch (type) {
     case "Clouds":
       return Icons.cloud;
+    case "Clear":
+      return Icons.wb_sunny;
     default:
-      return Icons.ice_skating;
+      return Icons.error;
+  }
+}
+
+Image fetchImage(String type) {
+  switch (type) {
+    case "Clouds":
+      return Image.asset(
+        "cloud.png",
+        height: 200,
+        width: 200,
+      );
+    case "Clear":
+      return Image.asset(
+        "cloud.png",
+        height: 200,
+        width: 200,
+      );
+    default:
+      return Image.asset(
+        "cloud.png",
+        height: 200,
+        width: 200,
+      );
   }
 }
