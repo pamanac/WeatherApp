@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tutorial_app/data/weather.dart';
+import 'package:intl/intl.dart';
 import '../data/http_helper.dart';
 
 class WeatherScreen extends StatefulWidget {
@@ -10,6 +11,9 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
+  DateTime now = DateTime.now();
+  DateFormat formatter = DateFormat('hh:mm');
+
   Weather result = Weather('', '', 0, 0, 0, 0);
 
   bool isMetric = true;
@@ -55,7 +59,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     alignment: Alignment.topLeft,
                   ),
                   Align(
-                    child: Text("12:00", style: TextStyle(color: Colors.white)),
+                    child: Text(formatter.format(now),
+                        style: TextStyle(color: Colors.white)),
                     alignment: Alignment.topRight,
                   ),
                   Align(
@@ -164,7 +169,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
   Future getData() async {
     HttpHelper helper = HttpHelper();
     result = await helper.getWeather(txtPlace.text);
-    setState(() {});
+    setState(() {
+      now = DateTime.now();
+    });
   }
 
   Widget weatherRow(String label, String value) {
