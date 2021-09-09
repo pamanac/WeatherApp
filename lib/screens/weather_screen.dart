@@ -16,6 +16,7 @@ class WeatherScreen extends StatefulWidget {
 class _WeatherScreenState extends State<WeatherScreen> {
   DateTime now = DateTime.now();
   DateFormat formatter = DateFormat('hh:mm');
+  // ignore: non_constant_identifier_names
   WeatherType wt_type = WeatherType.sunny;
 
   Weather result = Weather('', '', 0, 0, 0, 0);
@@ -195,9 +196,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   Future getCity() async {
-    LocatorHelper location_helper = LocatorHelper();
-    HttpHelper http_helper = HttpHelper();
-    result = await http_helper.getWeather(await location_helper.getLocation());
+    LocatorHelper locationHelper = LocatorHelper();
+    HttpHelper httpHelper = HttpHelper();
+    result = await httpHelper.getWeather(await locationHelper.getLocation());
     txtPlace.text = result.getName();
     setState(() {
       now = DateTime.now();
