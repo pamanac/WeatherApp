@@ -18,4 +18,8 @@ class Weather {
 
     this.description = weatherMap['weather'][0]['main'] ?? '';
   }
+
+  String getName() {
+    return this.name;
+  }
 }

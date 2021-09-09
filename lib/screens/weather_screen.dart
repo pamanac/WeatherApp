@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tutorial_app/data/locator.dart';
 import 'package:tutorial_app/data/weather.dart';
 import 'package:intl/intl.dart';
 import '../data/http_helper.dart';
@@ -40,22 +41,34 @@ class _WeatherScreenState extends State<WeatherScreen> {
               child: Stack(
                 children: [
                   Align(
-                    child: Container(
-                        width: 150.0,
-                        child: TextField(
-                            style: TextStyle(color: Colors.white),
-                            controller: txtPlace,
-                            decoration: InputDecoration(
-                                hintText: "City",
-                                hintStyle: TextStyle(color: Colors.white),
-                                labelStyle: TextStyle(color: Colors.white),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                suffixIcon: IconButton(
-                                    icon:
-                                        Icon(Icons.search, color: Colors.white),
-                                    onPressed: getData)))),
+                    child: Row(
+                      children: [
+                        Container(
+                            width: 150.0,
+                            child: TextField(
+                                style: TextStyle(color: Colors.white),
+                                controller: txtPlace,
+                                decoration: InputDecoration(
+                                    hintText: "City",
+                                    hintStyle: TextStyle(color: Colors.white),
+                                    labelStyle: TextStyle(color: Colors.white),
+                                    border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white),
+                                    ),
+                                    suffixIcon: IconButton(
+                                        icon: Icon(Icons.search,
+                                            color: Colors.white),
+                                        onPressed: getData)))),
+                        IconButton(
+                          icon: Icon(
+                            Icons.location_city,
+                            color: Colors.white,
+                          ),
+                          onPressed: getCity,
+                        )
+                      ],
+                    ),
                     alignment: Alignment.topLeft,
                   ),
                   Align(
@@ -174,6 +187,16 @@ class _WeatherScreenState extends State<WeatherScreen> {
     });
   }
 
+  Future getCity() async {
+    LocatorHelper location_helper = LocatorHelper();
+    HttpHelper http_helper = HttpHelper();
+    result = await http_helper.getWeather(await location_helper.getLocation());
+    txtPlace.text = result.getName();
+    setState(() {
+      now = DateTime.now();
+    });
+  }
+
   Widget weatherRow(String label, String value) {
     Widget row = Padding(
       padding: EdgeInsets.symmetric(vertical: 16),
@@ -238,7 +261,13 @@ Image fetchImage(String type) {
       );
     case "Clear":
       return Image.asset(
-        "cloud.png",
+        "sun2.png",
+        height: 200,
+        width: 200,
+      );
+    case "Rain":
+      return Image.asset(
+        "rain.png",
         height: 200,
         width: 200,
       );
