@@ -17,39 +17,95 @@ class _WeatherScreenState extends State<WeatherScreen> {
     return Scaffold(
         appBar: AppBar(title: Text("Weather")),
         body: Padding(
-            padding: EdgeInsets.all(16),
-            child: ListView(
+            padding: EdgeInsets.all(20),
+            child: Stack(
               children: [
-                Padding(
-                  padding: EdgeInsets.all(16),
-                  child: TextField(
-                      controller: txtPlace,
-                      decoration: InputDecoration(
-                          hintText: "City",
-                          suffixIcon: IconButton(
-                              icon: Icon(Icons.search), onPressed: getData))),
+                Align(
+                  child: Container(
+                      width: 100.0,
+                      child: TextField(
+                          controller: txtPlace,
+                          decoration: InputDecoration(
+                              hintText: "City",
+                              suffixIcon: IconButton(
+                                  icon: Icon(Icons.search),
+                                  onPressed: getData)))),
+                  alignment: Alignment.topLeft,
                 ),
-                weatherRow('Place: ', result.name),
-                Row(
-                  children: [
-                    Expanded(
-                        flex: 2,
-                        child: weatherRow('Description: ', result.description)),
-                    Expanded(
-                      flex: 1,
-                      child: result.description == "Clouds" //To improve
-                          ? Icon(Icons.cloud)
-                          : Icon(Icons.ac_unit),
-                    )
-                  ],
+                Align(
+                  child: Text("12:00"),
+                  alignment: Alignment.topRight,
                 ),
+                Align(
+                  child: Container(
+                      height: 100.0,
+                      width: 300.0,
+                      child: ListView(
+                        children: [
+                          //weatherRow('Perceived: ', result.perceived.toStringAsFixed(2)),
+                          Row(children: [
+                            Icon(Icons.access_alarm),
+                            Text(result.perceived.toStringAsFixed(2))
+                          ]),
+
+                          //weatherRow('Pressure: ', result.pressure.toString()),
+                          Row(children: [
+                            Icon(Icons.add_sharp),
+                            Text(result.pressure.toString())
+                          ]),
+
+                          //weatherRow('Humidity: ', result.humidity.toString()),
+                          Row(children: [
+                            Icon(Icons.safety_divider),
+                            Text(result.humidity.toString())
+                          ]),
+                        ],
+                      )),
+                  alignment: Alignment.bottomLeft,
+                ),
+                Align(
+                  child: Container(
+                      width: 150.0,
+                      height: 100.0,
+                      child: //weatherRow(
+                          //'', result.temperature.toStringAsFixed(2))
+                          Text(result.temperature.toStringAsFixed(2),
+                              style: TextStyle(fontSize: 40))),
+                  alignment: Alignment.bottomRight,
+                ),
+                Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      result.description == ""
+                          ? Text('')
+                          : Icon(fetchIcon(result.description)),
+                      Text(result.description)
+                    ],
+                  ),
+                )
+              ],
+            )));
+    /*
+          Padding(
+          padding: EdgeInsets.all(16)
+          */
+    /*
+          TextField(
+                    controller: txtPlace,
+                    decoration: InputDecoration(
+                        hintText: "City",
+                        suffixIcon: IconButton(
+                            icon: Icon(Icons.search), onPressed: getData)))
+          */
+    /*weatherRow('Place: ', result.name),
+                weatherRow('Description: ', result.description),
                 weatherRow(
                     'Temperature: ', result.temperature.toStringAsFixed(2)),
                 weatherRow('Perceived: ', result.perceived.toStringAsFixed(2)),
                 weatherRow('Pressure: ', result.pressure.toString()),
-                weatherRow('Humidity: ', result.humidity.toString()),
-              ],
-            )));
+                weatherRow('Humidity: ', result.humidity.toString()), */
   }
 
   Future getData() async {
@@ -82,5 +138,14 @@ class _WeatherScreenState extends State<WeatherScreen> {
     );
 
     return row;
+  }
+}
+
+IconData fetchIcon(String type) {
+  switch (type) {
+    case "Clouds":
+      return Icons.cloud;
+    default:
+      return Icons.ice_skating;
   }
 }
