@@ -3,6 +3,8 @@ import 'package:tutorial_app/data/locator.dart';
 import 'package:tutorial_app/data/weather.dart';
 import 'package:intl/intl.dart';
 import '../data/http_helper.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter_weather_bg/flutter_weather_bg.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({Key? key}) : super(key: key);
@@ -14,6 +16,7 @@ class WeatherScreen extends StatefulWidget {
 class _WeatherScreenState extends State<WeatherScreen> {
   DateTime now = DateTime.now();
   DateFormat formatter = DateFormat('hh:mm');
+  WeatherType wt_type = WeatherType.sunny;
 
   Weather result = Weather('', '', 0, 0, 0, 0);
 
@@ -32,11 +35,13 @@ class _WeatherScreenState extends State<WeatherScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text("Weather")),
-        body: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("world.jpg"), fit: BoxFit.cover)),
-          child: Padding(
+        body: Stack(children: [
+          WeatherBg(
+            weatherType: wt_type,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+          ),
+          Padding(
               padding: EdgeInsets.all(20),
               child: Stack(
                 children: [
@@ -157,7 +162,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   )
                 ],
               )),
-        ));
+        ]));
     /*
           Padding(
           padding: EdgeInsets.all(16)
@@ -184,6 +189,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     result = await helper.getWeather(txtPlace.text);
     setState(() {
       now = DateTime.now();
+      wt_type = getWeatherType(result.getWeather());
     });
   }
 
@@ -194,6 +200,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     txtPlace.text = result.getName();
     setState(() {
       now = DateTime.now();
+      wt_type = getWeatherType(result.getWeather());
     });
   }
 
@@ -237,6 +244,19 @@ class _WeatherScreenState extends State<WeatherScreen> {
     setState(() {
       isSelected = [isMetric, isImperial];
     });
+  }
+
+  WeatherType getWeatherType(String weather) {
+    switch (weather) {
+      case "Clouds":
+        return WeatherType.cloudy;
+      case "Clear":
+        return WeatherType.sunny;
+      case "Rain":
+        return WeatherType.middleRainy;
+      default:
+        return WeatherType.sunny;
+    }
   }
 }
 

@@ -22,4 +22,8 @@ class Weather {
   String getName() {
     return this.name;
   }
+
+  String getWeather() {
+    return this.description;
+  }
 }
