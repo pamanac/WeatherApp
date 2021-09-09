@@ -11,6 +11,17 @@ class WeatherScreen extends StatefulWidget {
 
 class _WeatherScreenState extends State<WeatherScreen> {
   Weather result = Weather('', '', 0, 0, 0, 0);
+
+  bool isMetric = true;
+  bool isImperial = false;
+  late List<bool> isSelected;
+
+  @override
+  void initState() {
+    isSelected = [isMetric, isImperial];
+    super.initState();
+  }
+
   final TextEditingController txtPlace = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -86,11 +97,30 @@ class _WeatherScreenState extends State<WeatherScreen> {
                         height: 100.0,
                         child: //weatherRow(
                             //'', result.temperature.toStringAsFixed(2))
+                            Column(
+                          children: [
                             Text(
-                                result.temperature.toStringAsFixed(2) +
+                                (isMetric
+                                        ? result.temperature.toStringAsFixed(2)
+                                        : (result.temperature * (9 / 5) + 32)
+                                            .toStringAsFixed(2)) +
                                     "\u00B0", //this is degree sign
                                 style: TextStyle(
-                                    fontSize: 40, color: Colors.white))),
+                                    fontSize: 40, color: Colors.white)),
+                            ToggleButtons(children: [
+                              Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                  child: Text("Metric",
+                                      style: TextStyle(
+                                          fontSize: 10, color: Colors.white))),
+                              Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                  child: Text("Imperial",
+                                      style: TextStyle(
+                                          fontSize: 10, color: Colors.white)))
+                            ], isSelected: isSelected, onPressed: toggleMeasure)
+                          ],
+                        )),
                     alignment: Alignment.bottomRight,
                   ),
                   Center(
@@ -161,6 +191,22 @@ class _WeatherScreenState extends State<WeatherScreen> {
     );
 
     return row;
+  }
+
+  void toggleMeasure(index) {
+    switch (index) {
+      case 0:
+        isMetric = true;
+        isImperial = false;
+        break;
+      case 1:
+        isMetric = false;
+        isImperial = true;
+        break;
+    }
+    setState(() {
+      isSelected = [isMetric, isImperial];
+    });
   }
 }
 
