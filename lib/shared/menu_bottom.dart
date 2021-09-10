@@ -9,7 +9,7 @@ class MenuBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.cloud), label: "Home"),
           BottomNavigationBarItem(
               icon: Icon(Icons.monitor_weight), label: "BMI"),
         ],

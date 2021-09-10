@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tutorial_app/screens/bmi_screen.dart';
-import 'package:tutorial_app/screens/intro_screen.dart'; 
+import 'package:tutorial_app/screens/intro_screen.dart';
+import 'package:tutorial_app/screens/weather_screen.dart'; 
 
 //Entry point
 void main() {
@@ -23,8 +24,9 @@ class MyApp extends StatelessWidget {
               Colors.blueGrey), //swatch affects many parts of the widget
       routes: {
         // route : builder
-        '/': (context) => IntroScreen(),
+        '/': (context) => WeatherScreen(),
         '/bmi': (context) => BmiScreen(),
+        '/weather' : (context) => WeatherScreen()
       },
       initialRoute: '/',
     );

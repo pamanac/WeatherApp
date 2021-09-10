@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tutorial_app/data/locator.dart';
 import 'package:tutorial_app/data/weather.dart';
 import 'package:intl/intl.dart';
+import 'package:tutorial_app/shared/menu_drawer.dart';
 import '../data/http_helper.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_weather_bg/flutter_weather_bg.dart';
@@ -18,6 +19,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
   DateFormat formatter = DateFormat('hh:mm');
   // ignore: non_constant_identifier_names
   WeatherType wt_type = WeatherType.sunny;
+
+  Color textColor = Colors.white;
+  double _opacity = 1.0;
 
   Weather result = Weather('', '', 0, 0, 0, 0);
 
@@ -36,135 +40,182 @@ class _WeatherScreenState extends State<WeatherScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Weather")),
-        body: Stack(children: [
-          WeatherBg(
-            weatherType: wt_type,
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-          ),
-          Padding(
-              padding: EdgeInsets.all(20),
-              child: Stack(
-                children: [
-                  Align(
-                    child: Row(
-                      children: [
-                        Container(
-                            width: 150.0,
-                            child: TextField(
-                                style: TextStyle(color: Colors.white),
-                                controller: txtPlace,
-                                decoration: InputDecoration(
-                                    hintText: "City",
-                                    hintStyle: TextStyle(color: Colors.white),
-                                    labelStyle: TextStyle(color: Colors.white),
-                                    border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white),
-                                    ),
-                                    suffixIcon: IconButton(
-                                        icon: Icon(Icons.search,
-                                            color: Colors.white),
-                                        onPressed: getData)))),
-                        IconButton(
-                          icon: Icon(
-                            Icons.location_city,
-                            color: Colors.white,
-                          ),
-                          onPressed: getCity,
-                        )
-                      ],
+        appBar: AppBar(
+            title: Text("Weather"),
+            backgroundColor: Colors.transparent,
+            flexibleSpace: Image(
+              image: AssetImage('world.jpg'),
+              fit: BoxFit.cover,
+            )),
+        drawer: MenuDrawer(),
+        body: AnimatedOpacity(
+          opacity: _opacity,
+          duration: const Duration(milliseconds: 200),
+          child: Stack(children: [
+            WeatherBg(
+              weatherType: wt_type,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+            ),
+            Padding(
+                padding: EdgeInsets.all(20),
+                child: Stack(
+                  children: [
+                    Align(
+                      child: Row(
+                        children: [
+                          Container(
+                              width: 150.0,
+                              child: TextField(
+                                  style: TextStyle(color: textColor),
+                                  controller: txtPlace,
+                                  decoration: InputDecoration(
+                                      hintText: "City",
+                                      hintStyle: TextStyle(color: textColor),
+                                      labelStyle: TextStyle(color: textColor),
+                                      border: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: textColor),
+                                      ),
+                                      suffixIcon: IconButton(
+                                          icon: Icon(Icons.search,
+                                              color: textColor),
+                                          onPressed: () {
+                                            dissapear();
+                                            getData();
+                                          })))),
+                          IconButton(
+                            icon: Icon(
+                              Icons.location_city,
+                              color: textColor,
+                            ),
+                            onPressed: () {
+                              dissapear();
+                              getCity();
+                            },
+                          )
+                        ],
+                      ),
+                      alignment: Alignment.topLeft,
                     ),
-                    alignment: Alignment.topLeft,
-                  ),
-                  Align(
-                    child: Text(formatter.format(now),
-                        style: TextStyle(color: Colors.white)),
-                    alignment: Alignment.topRight,
-                  ),
-                  Align(
-                    child: Container(
-                        height: 100.0,
-                        width: 300.0,
-                        child: ListView(
-                          children: [
-                            //weatherRow('Perceived: ', result.perceived.toStringAsFixed(2)),
-                            Row(children: [
-                              Icon(
-                                Icons.access_alarm,
-                                color: Colors.white,
-                              ),
-                              Text(result.perceived.toStringAsFixed(2),
-                                  style: TextStyle(color: Colors.white))
-                            ]),
-
-                            //weatherRow('Pressure: ', result.pressure.toString()),
-                            Row(children: [
-                              Icon(Icons.add_sharp, color: Colors.white),
-                              Text(result.pressure.toString(),
-                                  style: TextStyle(color: Colors.white))
-                            ]),
-
-                            //weatherRow('Humidity: ', result.humidity.toString()),
-                            Row(children: [
-                              Icon(Icons.window, color: Colors.white),
-                              Text(result.humidity.toString(),
-                                  style: TextStyle(color: Colors.white))
-                            ]),
-                          ],
-                        )),
-                    alignment: Alignment.bottomLeft,
-                  ),
-                  Align(
-                    child: Container(
-                        width: 150.0,
-                        height: 100.0,
-                        child: //weatherRow(
-                            //'', result.temperature.toStringAsFixed(2))
-                            Column(
-                          children: [
-                            Text(
-                                (isMetric
-                                        ? result.temperature.toStringAsFixed(2)
-                                        : (result.temperature * (9 / 5) + 32)
-                                            .toStringAsFixed(2)) +
-                                    "\u00B0", //this is degree sign
-                                style: TextStyle(
-                                    fontSize: 40, color: Colors.white)),
-                            ToggleButtons(children: [
-                              Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16),
-                                  child: Text("Metric",
-                                      style: TextStyle(
-                                          fontSize: 10, color: Colors.white))),
-                              Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16),
-                                  child: Text("Imperial",
-                                      style: TextStyle(
-                                          fontSize: 10, color: Colors.white)))
-                            ], isSelected: isSelected, onPressed: toggleMeasure)
-                          ],
-                        )),
-                    alignment: Alignment.bottomRight,
-                  ),
-                  Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        result.description == ""
-                            ? Text('')
-                            : //Icon(fetchIcon(result.description),
-                            fetchImage(result.description),
-                        Text(result.description,
-                            style: TextStyle(color: Colors.white))
-                      ],
+                    Align(
+                      child: Text(formatter.format(now),
+                          style: TextStyle(color: textColor)),
+                      alignment: Alignment.topRight,
                     ),
-                  )
-                ],
-              )),
-        ]));
+                    Align(
+                      child: Container(
+                          height: 85.0,
+                          width: 300.0,
+                          child: ListView(
+                            children: [
+                              //weatherRow('Perceived: ', result.perceived.toStringAsFixed(2)),
+                              Row(children: [
+                                Container(
+                                  child: Image(
+                                      image: (textColor == Colors.white
+                                          ? AssetImage("wind_white.png")
+                                          : AssetImage("wind_black.png")),
+                                      fit: BoxFit.cover),
+                                  height: 25,
+                                  width: 25,
+                                ),
+                                Text(
+                                    isMetric
+                                        ? result.wind.toStringAsFixed(2)
+                                        : (result.wind / 1.60934)
+                                            .toStringAsFixed(2),
+                                    style: TextStyle(color: textColor)),
+                                Text(isMetric ? " Km/h" : " Mph",
+                                    style: TextStyle(color: textColor))
+                              ]),
+
+                              //weatherRow('Pressure: ', result.pressure.toString()),
+                              Row(children: [
+                                Icon(Icons.speed, color: textColor),
+                                Text(result.pressure.toString(),
+                                    style: TextStyle(color: textColor))
+                              ]),
+
+                              //weatherRow('Humidity: ', result.humidity.toString()),
+                              Row(children: [
+                                Container(
+                                  child: Image(
+                                      image: (textColor == Colors.white
+                                          ? AssetImage("drop_white.png")
+                                          : AssetImage("drop_black.png")),
+                                      fit: BoxFit.cover),
+                                  height: 25,
+                                  width: 25,
+                                ),
+                                Text(result.humidity.toString(),
+                                    style: TextStyle(color: textColor))
+                              ]),
+                            ],
+                          )),
+                      alignment: Alignment.bottomLeft,
+                    ),
+                    Align(
+                      child: Container(
+                          width: 150.0,
+                          height: 85.0,
+                          child: //weatherRow(
+                              //'', result.temperature.toStringAsFixed(2))
+                              Column(
+                            children: [
+                              Text(
+                                  (isMetric
+                                          ? result.temperature
+                                              .toStringAsFixed(2)
+                                          : (result.temperature * (9 / 5) + 32)
+                                              .toStringAsFixed(2)) +
+                                      "\u00B0" +
+                                      (isMetric
+                                          ? "(C)"
+                                          : "(F)"), //this is degree sign
+                                  style: TextStyle(
+                                      fontSize: 30, color: textColor)),
+                              ToggleButtons(
+                                  children: [
+                                    Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        child: Text("Metric",
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: textColor))),
+                                    Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        child: Text("Imperial",
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: textColor)))
+                                  ],
+                                  isSelected: isSelected,
+                                  onPressed: toggleMeasure)
+                            ],
+                          )),
+                      alignment: Alignment.bottomRight,
+                    ),
+                    Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          result.description == ""
+                              ? Text('')
+                              : //Icon(fetchIcon(result.description),
+                              fetchImage(result.description),
+                          Text(result.description,
+                              style: TextStyle(color: textColor))
+                        ],
+                      ),
+                    )
+                  ],
+                )),
+          ]),
+        ));
     /*
           Padding(
           padding: EdgeInsets.all(16)
@@ -189,9 +240,18 @@ class _WeatherScreenState extends State<WeatherScreen> {
   Future getData() async {
     HttpHelper helper = HttpHelper();
     result = await helper.getWeather(txtPlace.text);
+
     setState(() {
+      _opacity = 1.0;
       now = DateTime.now();
       wt_type = getWeatherType(result.getWeather());
+      textColor = getColor(result.getWeather());
+    });
+  }
+
+  void dissapear() {
+    setState(() {
+      _opacity = 0.0;
     });
   }
 
@@ -201,8 +261,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
     result = await httpHelper.getWeather(await locationHelper.getLocation());
     txtPlace.text = result.getName();
     setState(() {
+      _opacity = 1.0;
       now = DateTime.now();
       wt_type = getWeatherType(result.getWeather());
+      textColor = getColor(result.getWeather());
     });
   }
 
@@ -251,13 +313,26 @@ class _WeatherScreenState extends State<WeatherScreen> {
   WeatherType getWeatherType(String weather) {
     switch (weather) {
       case "Clouds":
-        return WeatherType.cloudy;
+        return WeatherType.cloudyNight;
       case "Clear":
         return WeatherType.sunny;
       case "Rain":
         return WeatherType.middleRainy;
       default:
         return WeatherType.sunny;
+    }
+  }
+
+  Color getColor(String weather) {
+    switch (weather) {
+      case "Clouds":
+        return Colors.white;
+      case "Clear":
+        return Colors.black;
+      case "Rain":
+        return Colors.white;
+      default:
+        return Colors.white;
     }
   }
 }
