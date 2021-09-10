@@ -65,7 +65,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       child: Row(
                         children: [
                           Container(
-                              width: 150.0,
+                              width: 200.0,
                               child: TextField(
                                   style: TextStyle(color: textColor),
                                   controller: txtPlace,
@@ -157,7 +157,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     ),
                     Align(
                       child: Container(
-                          width: 150.0,
+                          width: 175.0,
                           height: 85.0,
                           child: //weatherRow(
                               //'', result.temperature.toStringAsFixed(2))
@@ -245,6 +245,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
       txtPlace.text = await locationHelper.getLocation();
       result = await helper.getWeather(txtPlace.text);
+    } else if (result.getName() == "North Pole") {
+      txtPlace.text = "North Pole";
+    } else if (result.getName() == "San Francisco") {
+      txtPlace.text = "San Francisco";
+    } else if (result.getName() == "Probably Seattle") {
+      txtPlace.text = "Probably Seattle";
     }
 
     setState(() {
@@ -324,6 +330,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
         return WeatherType.sunny;
       case "Rain":
         return WeatherType.middleRainy;
+      case "Mist":
+        return WeatherType.foggy;
+      case "Snow":
+        return WeatherType.heavySnow;
       default:
         return WeatherType.sunny;
     }

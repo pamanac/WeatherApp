@@ -26,4 +26,8 @@ class Weather {
   String getWeather() {
     return this.description;
   }
+
+  void setWeather(String weather) {
+    this.description = weather;
+  }
 }

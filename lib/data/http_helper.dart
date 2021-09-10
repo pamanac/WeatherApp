@@ -14,6 +14,13 @@ class HttpHelper {
   final String apiKey = "5f264c1eec85956f5b9cd2a2e5aded92";
 
   Future<Weather> getWeather(String location) async {
+    if (location == "SNOW!") {
+      return Weather('North Pole', 'Snow', -273.15, 10, 1, 1000);
+    } else if (location == "RAIN!") {
+      return Weather('Probably Seattle', 'Rain', 20, 1.4, 1, 1000);
+    } else if (location == "FOG!") {
+      return Weather('San Francisco', 'Mist', 22, 1.3, 1, 1000);
+    }
     Map<String, dynamic> parameters = {'q': location, 'appId': apiKey};
 
     Uri uri = Uri.https(authority, path, parameters);
