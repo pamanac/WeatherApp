@@ -15,11 +15,11 @@ class HttpHelper {
 
   Future<Weather> getWeather(String location) async {
     if (location == "SNOW!") {
-      return Weather('North Pole', 'Snow', -273.15, 10, 1, 1000);
+      return Weather('North Pole', 'Snow', -273.15, 10, 1007, 20);
     } else if (location == "RAIN!") {
-      return Weather('Probably Seattle', 'Rain', 20, 1.4, 1, 1000);
+      return Weather('Probably Seattle', 'Rain', 20, 1.4, 1012, 25);
     } else if (location == "FOG!") {
-      return Weather('San Francisco', 'Mist', 22, 1.3, 1, 1000);
+      return Weather('San Francisco', 'Mist', 22, 1.3, 1016, 23);
     }
     Map<String, dynamic> parameters = {'q': location, 'appId': apiKey};
 

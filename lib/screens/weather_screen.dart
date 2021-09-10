@@ -33,6 +33,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   void initState() {
     isSelected = [isMetric, isImperial];
     super.initState();
+    dissapear();
     getCity();
   }
 
@@ -68,6 +69,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                               width: 200.0,
                               child: TextField(
                                   style: TextStyle(color: textColor),
+                                  showCursor: false,
                                   controller: txtPlace,
                                   decoration: InputDecoration(
                                       hintText: "City",
