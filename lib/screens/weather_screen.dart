@@ -240,6 +240,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
   Future getData() async {
     HttpHelper helper = HttpHelper();
     result = await helper.getWeather(txtPlace.text);
+    if (result.getName() == "ERROR") {
+      LocatorHelper locationHelper = LocatorHelper();
+
+      txtPlace.text = await locationHelper.getLocation();
+      result = await helper.getWeather(txtPlace.text);
+    }
 
     setState(() {
       _opacity = 1.0;

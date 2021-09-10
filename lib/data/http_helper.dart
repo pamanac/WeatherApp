@@ -1,5 +1,8 @@
+import 'dart:html';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'locator.dart';
 
 import 'package:tutorial_app/data/weather.dart';
 
@@ -14,10 +17,30 @@ class HttpHelper {
     Map<String, dynamic> parameters = {'q': location, 'appId': apiKey};
 
     Uri uri = Uri.https(authority, path, parameters);
-    http.Response result = await http.get(uri);
+    try {
+      print("trying to fetch");
+      http.Response result = await http.get(uri);
+      print("This succeeded");
+      Map<String, dynamic> data = json.decode(result.body);
+      Weather weather = Weather.fromJson(data);
+      return weather;
+    } catch (e) {
+      print("In catch block");
+      /*LocatorHelper locationHelper = LocatorHelper();
+      String location = await locationHelper.getLocation();
+      Map<String, dynamic> params = {
+        'q': location,
+        'appId': apiKey
+      };
 
-    Map<String, dynamic> data = json.decode(result.body);
-    Weather weather = Weather.fromJson(data);
-    return weather;
+      uri = Uri.https(authority, path, params);
+      http.Response result = await http.get(uri);
+      Map<String, dynamic> data = json.decode(result.body);
+      Weather weather = Weather.fromJson(data);
+      return weather;
+      */
+      Weather result = Weather('ERROR', '', 0, 0, 0, 0);
+      return result;
+    }
   }
 }
